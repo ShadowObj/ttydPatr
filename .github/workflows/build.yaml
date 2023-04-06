@@ -1,0 +1,23 @@
+name: build
+on: 
+  workflow_dispatch:
+jobs:
+  main:
+    name: Checkout,Build,and Push
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Set Up Docker Env
+      uses: crazy-max/ghaction-setup-docker@v1.1.0
+
+    - name: Checkout
+      uses: actions/checkout@v2.7.0
+
+    - name: Build,Login,Push
+      run: |
+        sed -i -e 's/$TTYDUSER/${{ secrets.TTYDUSER }}' ./Dockerfile
+        sed -i -e 's/$TTYDTOKEN/${{ secrets.TTYDTOKEN }}' ./Dockerfile
+        sed -i -e 's/$TTYDPATH/${{ secrets.TTYDPATH }}' ./Dockerfile
+        sed -i -e 's/$TTYDPATH/${{ secrets.TTYDPATH }}' ./nginx.conf
+        docker login registry.patr.cloud -u ${{ secrets.PATRUSER }} -p ${{ secrets.PATRTOKEN }}
+        docker build . -t ${{ secrets.PATRREPO }}
+        docker push ${{ secrets.PATRREPO }}
