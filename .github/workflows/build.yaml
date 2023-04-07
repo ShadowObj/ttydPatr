@@ -16,8 +16,6 @@ jobs:
       run: |
         sed -i -e 's%$TTYDUSER%${{ secrets.TTYDUSER }}%' ./Dockerfile
         sed -i -e 's%$TTYDTOKEN%${{ secrets.TTYDTOKEN }}%' ./Dockerfile
-        sed -i -e 's%$TTYDPATH%${{ secrets.TTYDPATH }}%' ./Dockerfile
-        sed -i -e 's%$TTYDPATH%${{ secrets.TTYDPATH }}%' ./nginx.conf
         docker login registry.patr.cloud -u ${{ secrets.PATRUSER }} -p ${{ secrets.PATRTOKEN }}
         docker build . -t ${{ secrets.PATRREPO }}
         docker push ${{ secrets.PATRREPO }}
